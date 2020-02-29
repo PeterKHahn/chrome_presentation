@@ -2,26 +2,48 @@
     
     <head>
         <link href="https://fonts.googleapis.com/css?family=Rubik&display=swap" rel="stylesheet">
-        <title>Hello World Template</title>
+        <link href="https://fonts.googleapis.com/css?family=Playfair+Display|Simonetta&display=swap" rel="stylesheet">
+        <title>Can You Hear Us Now?</title>
         <link rel="stylesheet" type="text/css" href="static/main.css">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="static/jquery.js"><\/script>')</script>
+        <script src="static/main.js"></script>
+        
 
     </head>
-    <body>
+    <body >
         <div class=title>Can you hear Us now?</div>
-        <div>
-            <div class=voting-table>
-                <div class=voting-table-row>
-                    <div class='voting-table-cell names'>Name</div>
-                    <div class='voting-table-cell votes'>Votes</div>
-                    <div class='voting-table-cell delegates'>Delegates</div>
+
+
+
+
+        <div class='content fade-out'>
+            <div class=state>Now Reporting...</div>
+
+            <div class=info-bar>
+                <div class='info-item percent-reporting'></div>
+                <div class='info-item precincts-reporting'></div>
+                <div class='info-item total-votes'></div>
+            </div>
+            <div class='voting-table'>
+                <div class=voting-table-header>
+                    <div class='voting-table-cell names header-cell'>Candidate</div>
+                    <div class='voting-table-cell avatars header-cell'></div>
+                    <div class='voting-table-cell votes header-cell'>Votes</div>
+                    <div class='voting-table-cell percentages header-cell'>Percentage</div>
+                    <div class='voting-table-cell delegates header-cell'>Pledged Delegates</div>
                 </div>
-                {% for candidate in candidates %}
-                <div class=voting-table-row>
-                    <div class='voting-table-cell names'>{{candidate.name}}</div>
-                    <div class='voting-table-cell votes'>{{candidate.votes}}</div>
-                    <div class='voting-table-cell delegates'>{{candidate.delegates}}</div>
+
+                <div class=voting-table-rowset>
+                        <div class=voting-table-row>
+                                <div class='voting-table-cell names normal-cell'>Hello</div>
+                                <div class='voting-table-cell votes normal-cell'>0</div>
+                                <div class='voting-table-cell percentages normal-cell'>0%</div>
+                                <div class='voting-table-cell delegates normal-cell'>0</div>
+                            </div>
+
                 </div>
-                {% endfor %}
+
             </div>
         </div>
     </body>       
