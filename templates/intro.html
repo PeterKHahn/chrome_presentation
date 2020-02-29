@@ -1,0 +1,28 @@
+<html>
+    
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Rubik&display=swap" rel="stylesheet">
+        <title>Hello World Template</title>
+        <link rel="stylesheet" type="text/css" href="static/main.css">
+
+    </head>
+    <body>
+        <div class=title>Can you hear Us now?</div>
+        <div>
+            <div class=voting-table>
+                <div class=voting-table-row>
+                    <div class='voting-table-cell names'>Name</div>
+                    <div class='voting-table-cell votes'>Votes</div>
+                    <div class='voting-table-cell delegates'>Delegates</div>
+                </div>
+                {% for candidate in candidates %}
+                <div class=voting-table-row>
+                    <div class='voting-table-cell names'>{{candidate.name}}</div>
+                    <div class='voting-table-cell votes'>{{candidate.votes}}</div>
+                    <div class='voting-table-cell delegates'>{{candidate.delegates}}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </body>       
+</html>

@@ -1,0 +1,56 @@
+
+
+* {
+    box-sizing: border-box;
+    margin: 0px;
+}
+
+html {
+    font-family: 'Rubik';
+
+}
+
+.title {
+    font-family: 'Rubik';
+    font-size: 100px; 
+    color: #147FD7;
+    text-align: center;
+
+}
+
+.voting-table {
+    border-style: solid;
+    border-width: 2px; 
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+
+}
+
+
+.voting-table-row {
+    display: block; 
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px; 
+    margin-bottom: 10px; 
+}
+
+.voting-table-cell {
+    display: inline-block; 
+    box-sizing: border-box;
+
+}
+
+
+.delegates {
+    width: 20%;
+}
+
+.votes {
+    width: 20%; 
+}
+
+.names {
+    width: 60%; 
+}
