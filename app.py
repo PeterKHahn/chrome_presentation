@@ -39,8 +39,9 @@ templates = [x for x in os.listdir("templates") if '.html' in x]
 def process_candidate_list(candidate_list):
     total_votes = sum([x['votes'] for x in candidate_list])
 
-    candidate_list = candidate_list[:NUM_CANDIDATES]
 
+    candidate_list = candidate_list[:NUM_CANDIDATES]
+    
     for x in candidate_list:
         x['percentage'] = str("{:.1f}".format(100 * x['votes'] / total_votes, 2)) + "%"
         x['votes'] = locale.format("%d", x['votes'], grouping=True)
@@ -103,6 +104,8 @@ def retrieve_table(state):
         for row in table.find_all('tr'):
             if 'e-show-all' not in row['class']:
                 extracted = extract_row(row)
+                if extracted['name'] == 'Others':
+                    continue
                 if extracted['winner']:
                     info_dict['winner'] = True
                 
@@ -143,7 +146,6 @@ def retreive_nyt():
         html_pretty = soup.prettify()
 
         
-        # print(table.prettify())
 
         return html_pretty
 

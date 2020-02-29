@@ -8,7 +8,7 @@ req.onreadystatechange = handleResponse
 
 
 var stateListIdx = 0
-let stateList = ["New Hampshire", "Vermont"]
+let stateList = ["Alabama", "Arkansas", "California", "Colorado", "Maine", "Massachusetts", "Minnesota", "North Carolina", "Oklahoma", "Tennessee", "Texas", "Utah", "Vermont", "Virginia"]
 
 function nextState() {
     currIdx = stateListIdx % stateList.length
