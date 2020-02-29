@@ -2,55 +2,191 @@
 
 * {
     box-sizing: border-box;
-    margin: 0px;
 }
 
 html {
     font-family: 'Rubik';
+    background-color: rgb(204, 232, 255)
 
 }
 
+
+
+
+
 .title {
-    font-family: 'Rubik';
+    font-size: 70px; 
+    color: rgb(166, 197, 223)
+}
+
+.endtitle {
+    font-size: 70px; 
+    color: rgb(166, 197, 223);
+    text-align: right;
+    padding-top: 100px; 
+    padding-right: 30px; 
+}
+
+.state {
     font-size: 100px; 
     color: #147FD7;
-    text-align: center;
+    text-align: left;
+    padding-left: 10%; 
+    font-family: 'Playfair Display';
 
 }
 
 .voting-table {
-    border-style: solid;
-    border-width: 2px; 
+
     width: 80%;
     margin-left: 10%;
     margin-right: 10%;
+    background-color: white; 
+
+
+    border-style: solid;
+    border-color: #101553; 
+    border-width: 0px 0px 0px 22px; 
+
 
 }
+
+.content {
+    opacity: 1;
+    transition: 4s opacity;
+}
+
+.content.fade-out {
+    opacity: 0;
+    transition:none;
+}
+
+
 
 
 .voting-table-row {
     display: block; 
+    box-sizing: border-box;
+    font-size: 0px; 
+
+
+    padding-left: 30px;
+    padding-right: 10px;
+    padding-top: 00px; 
+    padding-bottom: 0px;
+
+    border-style: solid;
+    border-width: 1px 0px 1px 0px; 
+
+    border-color: #dddddd; 
+
+
+}
+.voting-table-row.loser {
+    color: #999999; 
+    filter: grayscale(100%)
+}
+
+.voting-table-header {
+    display: block; 
+    box-sizing: border-box;
+    font-size: 0px; 
+    color: #999999; 
+
     margin-left: 10px;
     margin-right: 10px;
     margin-top: 10px; 
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
+    
 }
 
-.voting-table-cell {
+.header-cell {
+    font-size: 28px;
+    padding-top: 10px; 
+}
+
+.header-cell.names {
+    font-size: 28px; 
+}
+.header-cell.delegates {
+    font-size: 28px; 
+}
+.header-cell.votes {
+    font-size: 28px; 
+}
+.header-cell.percentages {
+    font-size: 28px; 
+}
+
+.voting-table-cell{
     display: inline-block; 
     box-sizing: border-box;
 
+
 }
+
+
 
 
 .delegates {
     width: 20%;
+    font-size: 38px; 
+    text-align: center; 
+
 }
 
 .votes {
     width: 20%; 
+    font-size: 38px; 
+    text-align: center; 
+
+}
+.percentages {
+    width: 20%; 
+    font-size: 38px; 
+    text-align: center; 
+
 }
 
 .names {
+    width: 30%; 
+    font-size: 38px; 
+    
+}
+
+.avatars {
+    width: 10%; 
+}
+
+
+.info-item {
+    display: inline-block; 
+    padding-right: 20px; 
+}
+
+.info-bar {
+    color: #999999; 
     width: 60%; 
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.winner {
+    color: #7cd480; 
+    
+}
+
+
+.avatar {
+    border-radius: 50%;
+    transform: translateY(55%);
+    font-size:38px; 
+}
+
+
+.normal-cell {
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+
 }

@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import random
 import os
 import urllib.request
@@ -14,12 +14,16 @@ states = {
     "New Hampshire" : 'https://www.nytimes.com/interactive/2020/02/11/us/elections/results-new-hampshire-primary-election.html'
 }
 
+
+
 avatars = {
     "Bernie Sanders" : "static/res/bernie.png", 
     "Pete Buttigieg" : "static/res/pete.jpg",
     "Amy Klobuchar" : "static/res/amy.jpg", 
     "Elizabeth Warren": "static/res/warren.jpg", 
-    "Joseph R. Biden Jr.": "static/res/joe.jpg"
+    "Joseph R. Biden Jr.": "static/res/joe.jpg", 
+    "Tom Steyer" : "static/res/steyer.jpg", 
+    "Michael Bloomberg" : "static/res/mike.jpg"
 }
 
 NUM_CANDIDATES = 5
@@ -58,15 +62,26 @@ def hello_world():
     return render_template('intro.html', candidates=candidate_list, info=info_dict)
 
 
+
 @app.route('/retrieve_next')
-def help():
-    info_dict, candidate_list = retrieve_table("New Hampshire")
+def retrieve_next_page():
+    current_state = request.args['state']
+    info_dict, candidate_list = retrieve_table(current_state)
     candidate_list = process_candidate_list(candidate_list)
     return {"info" : info_dict, "candidates": candidate_list}
 
 
+
+
+
+
 def retrieve_table(state):
-    with urllib.request.urlopen(states[state]) as response:
+    url = states['New Hampshire']
+    if state in states:
+        url = states[state]
+
+
+    with urllib.request.urlopen(url) as response:
 
         info_dict = {}
         info_dict['state'] = state
@@ -80,15 +95,19 @@ def retrieve_table(state):
         info_dict['precincts_reporting'] = soup.find('span', class_='e-precinct-count').contents[0]
         info_dict['percentage_reporting'] = soup.find('span', class_='e-pct-reporting').contents[0]
 
-        print(info_dict)
-
 
         candidate_list = []
 
+        info_dict['winner'] = False
+
         for row in table.find_all('tr'):
             if 'e-show-all' not in row['class']:
-                candidate_list.append(extract_row(row))
-        
+                extracted = extract_row(row)
+                if extracted['winner']:
+                    info_dict['winner'] = True
+                
+                candidate_list.append(extracted)
+
         return info_dict, candidate_list
 
 
@@ -99,6 +118,7 @@ def extract_row(row):
     res['name'] = row.find('span', class_='e-name-display').contents[0].strip()
 
     res['delegates'] = int(row.find('span', class_='e-del-display').contents[0].replace(',', ''))
+
     res['avatar'] = avatars[res['name']] if res['name'] in avatars else ""
 
 

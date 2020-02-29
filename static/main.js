@@ -7,15 +7,26 @@ var req = new XMLHttpRequest();
 req.onreadystatechange = handleResponse
 
 
-function g() {
+var stateListIdx = 0
+let stateList = ["New Hampshire", "Vermont"]
 
-    req.open('GET', '/retrieve_next', true)
+function nextState() {
+    currIdx = stateListIdx % stateList.length
+    stateListIdx++ 
+    return stateList[currIdx]
+}
+
+
+function g() {
+    let state = nextState()
+    let request = "?state=" + state
+    req.open('GET', '/retrieve_next' + request, true)
     req.send() 
 }
 
 g()
 
-window.setInterval(g, 500 * 1000) 
+window.setInterval(g, 60 * 1000) 
 
 
 
@@ -45,6 +56,8 @@ function handleState(info, candidates) {
 
     $(".voting-table-rowset").empty()
 
+    var isWinner = info.winner
+
     for (idx in candidates){
         candidate = candidates[idx]
 
@@ -55,13 +68,14 @@ function handleState(info, candidates) {
         var name = $("<div class='voting-table-cell names normal-cell'></div>")
         if(candidate.winner) {
             name.addClass("winner")
+        }else if(isWinner) {
+            row.addClass("loser")
         }
         name.text(candidate.name)
         var avatar_div = $("<div class='voting-table-cell avatars normal-cell'></div>")
         var avatar = $("<img class=avatar height='80' width='80'>")
         avatar.attr("src", candidate.avatar)
         avatar_div.append(avatar)
-        console.log(avatar_div)
 
         var votes = $("<div class='voting-table-cell votes normal-cell'></div>")
         votes.text(candidate.votes)
