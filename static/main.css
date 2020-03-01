@@ -6,25 +6,31 @@
 
 html {
     font-family: 'Rubik';
-    background-color: rgb(204, 232, 255)
+    background-color: rgb(204, 232, 255); 
+    background: url("res/background.png")
 
 }
 
 
 
 
+
+.start.title {
+    padding-left: 30px; 
+}
+
+.end.title {
+    text-align: right;
+    padding-right: 30px; 
+
+}
 
 .title {
     font-size: 70px; 
-    color: rgb(166, 197, 223)
-}
+    height: 10%; 
+    color: rgb(65, 79, 90);
+    font-family: 'Crimson Text';
 
-.endtitle {
-    font-size: 70px; 
-    color: rgb(166, 197, 223);
-    text-align: right;
-    padding-top: 100px; 
-    padding-right: 30px; 
 }
 
 .state {
@@ -34,6 +40,10 @@ html {
     padding-left: 10%; 
     font-family: 'Playfair Display';
 
+}
+
+.content {
+    height: 80%;
 }
 
 .voting-table {
@@ -50,17 +60,6 @@ html {
 
 
 }
-
-.content {
-    opacity: 1;
-    transition: 4s opacity;
-}
-
-.content.fade-out {
-    opacity: 0;
-    transition:none;
-}
-
 
 
 

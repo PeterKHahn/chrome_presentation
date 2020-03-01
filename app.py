@@ -7,11 +7,12 @@ import locale
 
 app = Flask(__name__)
 
-locale.setlocale(locale.LC_ALL, 'en_US')
+locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
 
 states = {
-    "New Hampshire" : 'https://www.nytimes.com/interactive/2020/02/11/us/elections/results-new-hampshire-primary-election.html'
+    "New Hampshire" : 'https://www.nytimes.com/interactive/2020/02/11/us/elections/results-new-hampshire-primary-election.html', 
+    "South Carolina": 'https://www.nytimes.com/interactive/2020/02/29/us/elections/results-south-carolina-primary-election.html'
 }
 
 
@@ -43,7 +44,10 @@ def process_candidate_list(candidate_list):
     candidate_list = candidate_list[:NUM_CANDIDATES]
     
     for x in candidate_list:
-        x['percentage'] = str("{:.1f}".format(100 * x['votes'] / total_votes, 2)) + "%"
+        if total_votes == 0:
+            x['percentage'] = str("{:.1f}".format(0, 2)) + "%"
+        else:
+            x['percentage'] = str("{:.1f}".format(100 * x['votes'] / total_votes, 2)) + "%"
         x['votes'] = locale.format("%d", x['votes'], grouping=True)
 
     return candidate_list
@@ -54,7 +58,7 @@ def process_candidate_list(candidate_list):
 def hello_world():
     page = random.choice(templates)    
 
-    info_dict, candidate_list = retrieve_table("New Hampshire")
+    info_dict, candidate_list = retrieve_table("South Carolina")
 
     candidate_list = process_candidate_list(candidate_list)
 
@@ -77,24 +81,47 @@ def retrieve_next_page():
 
 
 def retrieve_table(state):
-    url = states['New Hampshire']
     if state in states:
         url = states[state]
+    else:
+        url = states['South Carolina']
+
 
 
     with urllib.request.urlopen(url) as response:
-
         info_dict = {}
         info_dict['state'] = state
         
         html = response.read()
         soup = BeautifulSoup(html, 'html.parser')
+        print(soup)
 
         table = soup.find('table', class_='e-table e-results-table')
+        
+        total_votes_found = soup.find('span', class_='e-total-votes')
+        if total_votes_found and total_votes_found.contents:
+            total_votes = total_votes_found.contents[0][:-2]
+        else:
+            total_votes = "No results yet..."
 
-        info_dict['total_votes'] = soup.find('span', class_='e-total-votes').contents[0][:-2]
-        info_dict['precincts_reporting'] = soup.find('span', class_='e-precinct-count').contents[0]
-        info_dict['percentage_reporting'] = soup.find('span', class_='e-pct-reporting').contents[0]
+        info_dict['total_votes'] = total_votes
+
+        precinct_count_found = soup.find('span', class_='e-precinct-count')
+        if precinct_count_found and precinct_count_found.contents:
+            precinct_count = precinct_count_found.contents[0]
+        else:
+            precinct_count = "No Precincts Reporting"
+
+        info_dict['precincts_reporting'] = precinct_count
+
+        percent_reporting_found = soup.find('span', class_='e-pct-reporting')
+        if percent_reporting_found and percent_reporting_found.contents:
+            percentage_reporting = percent_reporting_found.contents[0]
+        else:
+            percentage_reporting = "0% reporting"
+
+        
+        info_dict['percentage_reporting'] = percentage_reporting
 
 
         candidate_list = []
@@ -117,37 +144,28 @@ def retrieve_table(state):
 def extract_row(row):
     res = {} 
     res['winner'] = 'e-winner' in row['class']
-    res['votes'] = int(row.find('span', class_='e-votes-display').contents[0].replace(',', ''))
+
+    found_votes = row.find('span', class_='e-votes-display')
+    if found_votes and found_votes.contents:
+        votes = int(found_votes.contents[0].replace(',', ''))
+    else:
+        votes = 0
+
+    res['votes'] = votes
     res['name'] = row.find('span', class_='e-name-display').contents[0].strip()
 
-    res['delegates'] = int(row.find('span', class_='e-del-display').contents[0].replace(',', ''))
+    found_delegates = row.find('span', class_='e-del-display')
+
+    if found_delegates and found_delegates.contents:
+        delegates = int(row.find('span', class_='e-del-display').contents[0].replace(',', ''))
+    else:
+        delegates = 0
+
+    
+
+    res['delegates'] = delegates
 
     res['avatar'] = avatars[res['name']] if res['name'] in avatars else ""
 
 
     return res
-    
-
-
-def retreive_nyt():
-    """
-    Returns the NYT page with the elections results
-    """
-    with urllib.request.urlopen(NYT_URL) as response:
-        html = response.read()
-        soup = BeautifulSoup(html, 'html.parser')
-
-
-        soup.find('div', id='standalone-header').decompose()
-        soup.find('nav', class_='e-navigation').decompose()
-        soup.find('section', class_='e-column')['style'] = "width: 100%"
-        names = soup.find_all('span', class_='e-name-display')
-
-        html_pretty = soup.prettify()
-
-        
-
-        return html_pretty
-
-
-

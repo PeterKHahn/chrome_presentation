@@ -3,12 +3,16 @@ $(function() {
 });
 
 
+const TRANSITION_SECONDS = 12
+
+
 var req = new XMLHttpRequest(); 
 req.onreadystatechange = handleResponse
 
 
 var stateListIdx = 0
-let stateList = ["Alabama", "Arkansas", "California", "Colorado", "Maine", "Massachusetts", "Minnesota", "North Carolina", "Oklahoma", "Tennessee", "Texas", "Utah", "Vermont", "Virginia"]
+let stateList = ["Alabama", "Arkansas", "California", "Colorado", "Maine", "Massachusetts", "Minnesota", 
+    "North Carolina", "Oklahoma", "Tennessee", "Texas", "Utah", "Vermont", "Virginia"]
 
 function nextState() {
     currIdx = stateListIdx % stateList.length
@@ -26,10 +30,7 @@ function g() {
 
 g()
 
-window.setInterval(g, 60 * 1000) 
-
-
-
+window.setInterval(g, TRANSITION_SECONDS * 1000) 
 
 
 function handleResponse() {
@@ -37,7 +38,14 @@ function handleResponse() {
         if (req.status === 200) {
             json = JSON.parse(req.responseText)
 
-            handleState(json.info, json.candidates) ; 
+
+            $('.content').animate({ opacity: 0 })
+
+            setTimeout(function() {
+                handleState(json.info, json.candidates)
+                $('.content').animate({ opacity: 1 })
+
+            }, 1500)
 
 
         }
@@ -45,16 +53,53 @@ function handleResponse() {
 
 }
 
-function handleState(info, candidates) {
-    $('.content').addClass('fade-out'); 
+function infoBarDom(info) {
+    var infoBar = $("<div class=info-bar></div>")
+    var percentReporting = $("<div class='info-item percent-reporting'></div>")
+    percentReporting.text(info.percentage_reporting)
+    var precinctsReporting = $("<div class='info-item precincts-reporting'></div>")
+    precinctsReporting.text(info.precincts_reporting); 
+    var totalVotes = $("<div class='info-item total-votes'></div>")
+    totalVotes.text(info.total_votes)
+
+    infoBar.append(percentReporting)
+    infoBar.append(precinctsReporting)
+    infoBar.append(totalVotes)
+
+    return infoBar
 
 
-    $('.info-item.percent-reporting').text(info.percentage_reporting);
-    $('.info-item.precincts-reporting').text(info.precincts_reporting); 
-    $('.info-item.total-votes').text(info.total_votes); 
-    $('.state').text(info.state)
+}
 
-    $(".voting-table-rowset").empty()
+function constructVotingTableHeader() {
+    var header = $("<div class=voting-table-header></div>")
+
+    var col1 = $("<div class='voting-table-cell names header-cell'>Candidate</div>")
+    col1.text("Candidate")
+
+    var col2 = $("<div class='voting-table-cell avatars header-cell'></div>")
+    
+    var col3 = $("<div class='voting-table-cell votes header-cell'>Votes</div>")
+    col3.text("Votes")
+
+    var col4 = $("<div class='voting-table-cell percentages header-cell'></div>")
+    col4.text("Percentage")
+
+    var col5 = $("<div class='voting-table-cell delegates header-cell'></div>")
+    col5.text("Pledged Delegates")
+
+
+    header.append(col1)
+    header.append(col2)
+    header.append(col3)
+    header.append(col4)
+    header.append(col5)
+
+    return header
+}
+
+function constructVotingTableRowset(info, candidates) {
+    var votingTableRowset = $("<div class=voting-table-rowset></div>")
 
     var isWinner = info.winner
 
@@ -63,8 +108,6 @@ function handleState(info, candidates) {
 
         var row = $("<div class=voting-table-row></div>")
         
-
-
         var name = $("<div class='voting-table-cell names normal-cell'></div>")
         if(candidate.winner) {
             name.addClass("winner")
@@ -92,15 +135,41 @@ function handleState(info, candidates) {
         row.append(votes)
         row.append(percentages)
         row.append(delegates)
-        $(".voting-table-rowset").append(row)
-
-
+        votingTableRowset.append(row)
 
     }
+
+    return votingTableRowset
+}
+
+function constructVotingTable(info, candidates) {
+    var votingTable = $("<div class='voting-table'></div>")
+    var header = constructVotingTableHeader()
+
+    var rowset = constructVotingTableRowset(info, candidates)
+
+    votingTable.append(header)
+    votingTable.append(rowset)
+
+
+    return votingTable
+
+}
+
+
+function handleState(info, candidates) {
     
-    window.setTimeout(function(){
-        $('.content').removeClass('fade-out'); 
-    })
+    var state = $("<div class=state>Now Reporting...</div>")
+    state.text(info.state)
+
+    var infoBar = infoBarDom(info)
+    var votingTable = constructVotingTable(info, candidates)
+    
+    $(".content").empty()
+    $(".content").append(state)
+    $(".content").append(infoBar)
+    $(".content").append(votingTable)
+
 
 }
 
