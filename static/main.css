@@ -7,24 +7,19 @@
 html {
     font-family: 'Rubik';
     background-color: rgb(204, 232, 255); 
-    background: url("res/background.jpg")
+    background: url("res/background3.png")
 
 }
 
 
-
-
-
 .start.title {
     padding-left: 30px; 
-    color: rgb(195, 219, 236);
 
 }
 
 .end.title {
     text-align: right;
     padding-right: 30px; 
-    color: rgb(26, 33, 97);
 
 
 }
@@ -33,16 +28,16 @@ html {
     font-size: 70px; 
     height: 10%; 
     color: rgb(195, 219, 236);
-    font-family: 'Crimson Text';
+    font-family: 'Permanent Marker';
 
 }
 
 .state {
     font-size: 100px; 
-    color: #147FD7;
+    color: rgb(195, 219, 236);
     text-align: left;
     padding-left: 10%; 
-    font-family: 'Playfair Display';
+    font-family: 'Anton';
 
 }
 
