@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 
 from events.onyourleft import retrieve_table, process_candidate_list
+from general.spotify import *
 
 app = Flask(__name__)
 
@@ -22,6 +23,11 @@ def retrieve_next_page():
     candidate_list = process_candidate_list(candidate_list)
     return {"info" : info_dict, "candidates": candidate_list}
 
+
+@app.route("/spotify")
+def spotify_player():
+    
+    return {}
 
 
 
