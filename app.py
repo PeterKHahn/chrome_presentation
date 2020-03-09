@@ -18,13 +18,13 @@ states = {
 
 
 avatars = {
-    "Bernie Sanders" : "static/res/bernie.png", 
-    "Pete Buttigieg" : "static/res/pete.jpg",
-    "Amy Klobuchar" : "static/res/amy.jpg", 
-    "Elizabeth Warren": "static/res/warren.jpg", 
-    "Joseph R. Biden Jr.": "static/res/joe.jpg", 
-    "Tom Steyer" : "static/res/steyer.jpg", 
-    "Michael Bloomberg" : "static/res/mike.jpg"
+    "Bernie Sanders" : "/static/res/bernie.png", 
+    "Pete Buttigieg" : "/static/res/pete.jpg",
+    "Amy Klobuchar" : "/static/res/amy.jpg", 
+    "Elizabeth Warren": "/static/res/warren.jpg", 
+    "Joseph R. Biden Jr.": "/static/res/joe.jpg", 
+    "Tom Steyer" : "/static/res/steyer.jpg", 
+    "Michael Bloomberg" : "/static/res/mike.jpg"
 }
 
 NUM_CANDIDATES = 5
@@ -54,17 +54,11 @@ def process_candidate_list(candidate_list):
 
 
 
-@app.route('/')
-def hello_world():
-    page = random.choice(templates)    
+@app.route('/event/<string:title>')
+def hello_world(title):
 
-    info_dict, candidate_list = retrieve_table("South Carolina")
-
-    candidate_list = process_candidate_list(candidate_list)
-
-    
-
-    return render_template('intro.html', candidates=candidate_list, info=info_dict)
+    page = title + ".html"
+    return render_template(page)
 
 
 
@@ -94,7 +88,6 @@ def retrieve_table(state):
         
         html = response.read()
         soup = BeautifulSoup(html, 'html.parser')
-        print(soup)
 
         table = soup.find('table', class_='e-table e-results-table')
         
